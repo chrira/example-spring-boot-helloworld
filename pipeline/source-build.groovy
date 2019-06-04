@@ -35,6 +35,30 @@ pipeline {
 		      openshift.withCluster() {
 			openshift.withProject() {
 				openshift.raw('start-build example-spring-boot-helloworld --from-dir=. --follow')
+				
+			def rubySelector = openshift.selector("bc", "example-spring-boot-helloworld").latest()
+                    	def builds
+               
+                        rubySelector.object()
+                        builds = rubySelector.related( "builds" )
+                        
+                        
+                       	builds.untilEach {
+				return it.object().status.phase == "Complete" || it.object().status.phase == "Failed" || it.object().status.phase == "Cancelled" || it.object().status.phase == "Aborted" 
+			    }
+				
+                         echo "Build logs for ${builds.names()}:"
+				
+			// Find the bc again, and ask for its logs
+                    def result = rubySelector.logs()
+    
+                    // Each high-level operation exposes stout/stderr/status of oc actions that composed
+                    echo "Result of logs operation:"
+                    echo "  status: ${result.status}"
+                    echo "  stderr: ${result.err}"
+                    echo "  number of actions to fulfill: ${result.actions.size()}"
+                    echo "  first action executed: ${result.actions[0].cmd}"
+				
 				/*
 			  def builds = openshift.startBuild(".", "--from-build=example-spring-boot-helloworld")
 			  builds.logs('-f')
