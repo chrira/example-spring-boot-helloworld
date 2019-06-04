@@ -34,7 +34,7 @@ pipeline {
 		    script {
 		      openshift.withCluster() {
 			openshift.withProject() {
-			  def builds = openshift.startBuild("example-spring-boot-helloworld")
+			  def builds = openshift.startBuild(".", "--from-build=example-spring-boot-helloworld")
 			  builds.logs('-f')
 			  timeout(15) {
 			    builds.untilEach(1) {
