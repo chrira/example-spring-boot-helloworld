@@ -8,8 +8,8 @@ name: example-spring-boot-helloworld
 spec:
 output:
   to:
-  	kind: ImageStreamTag
-	name: example-spring-boot-helloworld:latest
+    kind: ImageStreamTag
+    name: example-spring-boot-helloworld:latest
 postCommit: {}
 resources: {}
 runPolicy: Serial
