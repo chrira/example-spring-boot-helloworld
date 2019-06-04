@@ -30,17 +30,21 @@ pipeline {
             }
         }
 	stage('Build') {
-	      openshift.withCluster() {
-		openshift.withProject() {
-		  def builds = openshift.startBuild("example-spring-boot-helloworld")
-		  builds.logs('-f')
-		  timeout(15) {
-		    builds.untilEach(1) {
-		      return (it.object().status.phase == "Complete")
+            steps {
+		    script {
+		      openshift.withCluster() {
+			openshift.withProject() {
+			  def builds = openshift.startBuild("example-spring-boot-helloworld")
+			  builds.logs('-f')
+			  timeout(15) {
+			    builds.untilEach(1) {
+			      return (it.object().status.phase == "Complete")
+			    }
+			  }
+			}
+		      }
 		    }
-		  }
-		}
-	      }
 	    }
+	}
     }
 }
