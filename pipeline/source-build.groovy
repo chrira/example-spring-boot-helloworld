@@ -43,7 +43,7 @@ pipeline {
 			      return (it.object().status.phase == "Complete")
 			    }
 			  }
-				/*
+				*/
 			}
 		      }
 		    }
