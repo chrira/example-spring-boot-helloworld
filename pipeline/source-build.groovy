@@ -7,6 +7,7 @@ pipeline {
     environment {
         DEFAULT_JVM_OPTS = "-Dhttp.proxyHost=l98fppx1.admin.arbeitslosenkasse.ch -Dhttp.proxyPort=8080 -Dhttps.proxyHost=l98fppx1.admin.arbeitslosenkasse.ch -Dhttps.proxyPort=8080"
         JAVA_TOOL_OPTIONS = "$JAVA_TOOL_OPTIONS $DEFAULT_JVM_OPTS"
+		NEXUS = credentials('nexus-admin')
     }
     stages {
         stage('prepare') {
@@ -17,6 +18,15 @@ pipeline {
         stage('Build') {
             steps {
                 sh './gradlew build'
+				sh "curl --fail -u \'${NEXUS}\' --upload-file build/libs/springboots2idemo-0.0.1-SNAPSHOT.jar http://nexus-build-infra.apps.admin.arbeitslosenkasse.ch/repository/maven-snapshots/ch/admin/test/upload/0.1-SNAPSHOT/upload-0.1-SNAPSHOT.jar"
+            }
+            post {
+                always {
+                    junit 'build/test-results/*.xml'  // Requires JUnit plugin
+                }
+                success {
+                    archiveArtifacts 'build/libs/springboots2idemo*.jar'
+                }
             }
         }
     }
