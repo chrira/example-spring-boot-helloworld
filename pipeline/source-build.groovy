@@ -9,6 +9,9 @@ pipeline {
         JAVA_TOOL_OPTIONS = "$JAVA_TOOL_OPTIONS $DEFAULT_JVM_OPTS"
 		NEXUS = credentials('nexus-admin')
     }
+    triggers {
+        pollSCM('H/5 * * * *')
+    }
     stages {
         stage('prepare') {
             steps {
