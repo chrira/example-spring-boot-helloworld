@@ -15,7 +15,7 @@ pipeline {
                 git branch: 'build', poll: false, url: 'https://github.com/chrira/example-spring-boot-helloworld.git'
             }
         }
-        stage('Build') {
+        stage('Build App') {
             steps {
                 sh './gradlew build'
 				sh "curl --fail -u \'${NEXUS}\' --upload-file build/libs/springboots2idemo-0.0.1-SNAPSHOT.jar http://nexus-build-infra.apps.admin.arbeitslosenkasse.ch/repository/maven-snapshots/ch/admin/test/upload/0.1-SNAPSHOT/upload-0.1-SNAPSHOT.jar"
@@ -29,5 +29,18 @@ pipeline {
                 }
             }
         }
+	stage('Build') {
+	      openshift.withCluster() {
+		openshift.withProject() {
+		  def builds = openshift.startBuild("example-spring-boot-helloworld")
+		  builds.logs('-f')
+		  timeout(15) {
+		    builds.untilEach(1) {
+		      return (it.object().status.phase == "Complete")
+		    }
+		  }
+		}
+	      }
+	    }
     }
 }
