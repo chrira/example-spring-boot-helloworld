@@ -1,0 +1,12 @@
+kind: "BuildConfig"
+apiVersion: "v1"
+metadata:
+  name: "sample-pipeline"
+spec:
+  source:
+    git:
+      uri: "https://github.com/chrira/example-spring-boot-helloworld.git"
+	  ref: "build"
+  strategy:
+    jenkinsPipelineStrategy:
+      jenkinsfilePath: pipeline/source-build.groovy
