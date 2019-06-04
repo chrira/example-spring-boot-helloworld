@@ -8,7 +8,7 @@ name: example-spring-boot-helloworld
 spec:
 output:
   to:
-	kind: ImageStreamTag
+  	kind: ImageStreamTag
 	name: example-spring-boot-helloworld:latest
 postCommit: {}
 resources: {}
