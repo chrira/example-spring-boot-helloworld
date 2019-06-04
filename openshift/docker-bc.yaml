@@ -1,25 +1,38 @@
-apiVersion: build.openshift.io/v1
-kind: BuildConfig
-metadata:
-  labels:
-    build: example-spring-boot-helloworld
-    app: example-spring-boot-helloworld
-  name: example-spring-boot-helloworld
-spec:
-  output:
-    to:
-      kind: ImageStreamTag
-      name: example-spring-boot-helloworld:latest
-  postCommit: {}
-  resources: {}
-  runPolicy: Serial
-  source:
-  strategy:
-    dockerStrategy: {}
-    type: Docker
-  triggers:
-  - github:
-    type: GitHub
-  - generic:
-    type: Generic
-  - type: ConfigChange
+apiVersion: v1
+items:
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    labels:
+      build: example-spring-boot-helloworld
+      app: example-spring-boot-helloworld
+    name: example-spring-boot-helloworld
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      build: example-spring-boot-helloworld
+      app: example-spring-boot-helloworld
+    name: example-spring-boot-helloworld
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: example-spring-boot-helloworld:latest
+    postCommit: {}
+    resources: {}
+    source:
+      binary: {}
+      type: Binary
+    strategy:
+      dockerStrategy: {}
+      type: Docker
+    triggers:
+    - github:
+        secret: 6u5tRcSlzcMhg9C3W2ge
+      type: GitHub
+    - generic:
+        secret: WIO50cUcJv0PdYgAKrbH
+      type: Generic
+kind: List
+metadata: {}
