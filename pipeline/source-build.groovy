@@ -34,6 +34,8 @@ pipeline {
 		    script {
 		      openshift.withCluster() {
 			openshift.withProject() {
+				openshift.raw('start-build example-spring-boot-helloworld --from-dir=. --follow')
+				/*
 			  def builds = openshift.startBuild(".", "--from-build=example-spring-boot-helloworld")
 			  builds.logs('-f')
 			  timeout(15) {
@@ -41,6 +43,7 @@ pipeline {
 			      return (it.object().status.phase == "Complete")
 			    }
 			  }
+				/*
 			}
 		      }
 		    }
