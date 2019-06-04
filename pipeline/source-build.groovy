@@ -36,7 +36,7 @@ pipeline {
 			openshift.withProject() {
 				openshift.raw('start-build example-spring-boot-helloworld --from-dir=. --follow')
 				
-			def rubySelector = openshift.selector("bc", "example-spring-boot-helloworld").latest()
+			def rubySelector = openshift.selector("bc", "example-spring-boot-helloworld")
                     	def builds
                
                         rubySelector.object()
