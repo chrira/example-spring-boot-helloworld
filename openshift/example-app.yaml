@@ -1,0 +1,74 @@
+apiVersion: v1
+items:
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: example-spring-boot-helloworld
+    name: example-spring-boot-helloworld
+  spec:
+    replicas: 1
+    selector:
+      app: example-spring-boot-helloworld
+      deploymentconfig: example-spring-boot-helloworld
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        labels:
+          app: example-spring-boot-helloworld
+          deploymentconfig: example-spring-boot-helloworld
+      spec:
+        containers:
+        - image: docker-registry.default.svc:5000/frank-hello-world/example-spring-boot-helloworld:latest
+          name: example-spring-boot-helloworld
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 8778
+            protocol: TCP
+          - containerPort: 9000
+            protocol: TCP
+          - containerPort: 9779
+            protocol: TCP
+          resources: {}
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - example-spring-boot-helloworld
+        from:
+          kind: ImageStreamTag
+          name: example-spring-boot-helloworld:latest
+      type: ImageChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: example-spring-boot-helloworld
+    name: example-spring-boot-helloworld
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    - name: 8778-tcp
+      port: 8778
+      protocol: TCP
+      targetPort: 8778
+    - name: 9000-tcp
+      port: 9000
+      protocol: TCP
+      targetPort: 9000
+    - name: 9779-tcp
+      port: 9779
+      protocol: TCP
+      targetPort: 9779
+    selector:
+      app: example-spring-boot-helloworld
+      deploymentconfig: example-spring-boot-helloworld
+kind: List
+metadata: {}
