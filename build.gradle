@@ -27,6 +27,7 @@ dependencies {
 	implementation('org.liquibase:liquibase-core')
 	implementation('io.micrometer:micrometer-registry-prometheus')
 	compileOnly('org.springframework.boot:spring-boot-starter-validation')
+	compile group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '6.5'
 	runtimeOnly('com.h2database:h2')
 	runtimeOnly('mysql:mysql-connector-java')
 	runtimeOnly('org.postgresql:postgresql')
